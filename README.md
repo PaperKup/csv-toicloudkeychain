@@ -2,7 +2,7 @@
 AppleScript that will read a CSV file containing URL, username and password data and import this to iCloud KeyChain via Safari.
 
 
-[![csv-toicloudkeychain demo](https://img.youtube.com/vi/DcaovWMov_U/0.jpg)](https://youtu.be/DcaovWMov_U)
+![alt tag](demo.gif)
 
 ## CSV Layout
 Create a CSV without headers with data in the below order.

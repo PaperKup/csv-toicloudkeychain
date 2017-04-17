@@ -13,4 +13,4 @@ For example, import an entry for the user doggo at woof.org.
 
 ## Accessibility Permissions
 Script editor must be given permission under System Preferences - Security & Privacy - Accessibility to run. Ensure you remove this after you have finished running the script.
-![alt tag](scripteditor-permissions.png | width=300)
+![alt tag](scripteditor-permissions.png)

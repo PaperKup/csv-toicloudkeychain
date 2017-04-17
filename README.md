@@ -9,8 +9,8 @@ Create a csv without headers with data in the below order.
 >username,url,password
 
 For example, import an entry for the user doggo at woof.org.
->doggo,https://woof.org,secretbonepass
+>doggo,woof.org,secretbonepass
 
 ## Accessibility Permissions
 Script editor must be given permission under System Preferences - Security & Privacy - Accessibility to run. Ensure you remove this after you have finished running the script.
-![alt tag](https://PaperKup/csv-toicloudkeychain/blob/master/scripteditor-permissions.png)
+![alt tag](scripteditor-permissions.png)

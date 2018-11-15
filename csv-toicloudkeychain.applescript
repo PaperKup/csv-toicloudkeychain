@@ -28,9 +28,10 @@ set vals to {}
 set AppleScript's text item delimiters to ","
 repeat with i from 1 to length of recs
 	set end of vals to text items of (item i of recs)
-	set kcURL to text item 1 of (item i of recs)
-	set kcUsername to text item 2 of (item i of recs)
-	set kcPassword to text item 3 of (item i of recs)
+    -- ignore item 1 "name"
+	set kcURL to text item 2 of (item i of recs)
+	set kcUsername to text item 3 of (item i of recs)
+	set kcPassword to text item 4 of (item i of recs)
 	
 	-- write kcURL, kcUsername and kcPassword into text fields of safari passwords
 	tell application "System Events"
@@ -40,7 +41,7 @@ repeat with i from 1 to length of recs
 				
 				click button "Add" of group 1 of group 1 of it
 				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
+				tell sheet 1 of it
 					set value of text field 1 of it to kcURL
 					keystroke tab
 					set value of text field 2 of it to kcUsername

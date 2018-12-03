@@ -11,11 +11,13 @@ set recs to paragraphs of f
 tell application "System Events"
 	tell application process "Safari"
 		set frontmost to true
+		delay 3
 		keystroke "," using command down
+		delay 3
 		tell window 1
-			click button "Passwords" of toolbar 1 of it
-			repeat until (exists button "Add" of group 1 of group 1 of it)
-				if not (exists button "Add" of group 1 of group 1 of it) then
+			click button "Пароли" of toolbar 1 of it
+			repeat until (exists button "Добавить" of group 1 of group 1 of it)
+				if not (exists button "Добавить" of group 1 of group 1 of it) then
 					display dialog "To begin importing, unlock Safari passwords then click OK. Please do not use your computer until the process has completed." with title "CSV to iCloud Keychain"
 				end if
 			end repeat
@@ -28,9 +30,10 @@ set vals to {}
 set AppleScript's text item delimiters to ","
 repeat with i from 1 to length of recs
 	set end of vals to text items of (item i of recs)
-	set kcURL to text item 1 of (item i of recs)
-	set kcUsername to text item 2 of (item i of recs)
-	set kcPassword to text item 3 of (item i of recs)
+	-- ignore item 1 "name"
+	set kcURL to text item 2 of (item i of recs)
+	set kcUsername to text item 3 of (item i of recs)
+	set kcPassword to text item 4 of (item i of recs)
 	
 	-- write kcURL, kcUsername and kcPassword into text fields of safari passwords
 	tell application "System Events"
@@ -38,9 +41,9 @@ repeat with i from 1 to length of recs
 			set frontmost to true
 			tell window 1
 				
-				click button "Add" of group 1 of group 1 of it
+				click button "Добавить" of group 1 of group 1 of it
 				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
+				tell sheet 1 of it
 					set value of text field 1 of it to kcURL
 					keystroke tab
 					set value of text field 2 of it to kcUsername
@@ -53,5 +56,3 @@ repeat with i from 1 to length of recs
 		end tell
 	end tell
 end repeat
-
-

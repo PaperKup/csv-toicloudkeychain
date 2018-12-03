@@ -11,12 +11,13 @@ set recs to paragraphs of f
 tell application "System Events"
 	tell application process "Safari"
 		set frontmost to true
+		delay 3
 		keystroke "," using command down
 		delay 3
 		tell window 1
-			click button "РџР°СЂРѕР»Рё" of toolbar 1 of it
-			repeat until (exists button "Р”РѕР±Р°РІРёС‚СЊ" of group 1 of group 1 of it)
-				if not (exists button "Р”РѕР±Р°РІРёС‚СЊ" of group 1 of group 1 of it) then
+			click button "Џароли" of toolbar 1 of it
+			repeat until (exists button "„обавить" of group 1 of group 1 of it)
+				if not (exists button "„обавить" of group 1 of group 1 of it) then
 					display dialog "To begin importing, unlock Safari passwords then click OK. Please do not use your computer until the process has completed." with title "CSV to iCloud Keychain"
 				end if
 			end repeat
@@ -40,7 +41,7 @@ repeat with i from 1 to length of recs
 			set frontmost to true
 			tell window 1
 				
-				click button "Р”РѕР±Р°РІРёС‚СЊ" of group 1 of group 1 of it
+				click button "„обавить" of group 1 of group 1 of it
 				-- write fields
 				tell sheet 1 of it
 					set value of text field 1 of it to kcURL

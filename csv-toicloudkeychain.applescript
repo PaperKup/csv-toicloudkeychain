@@ -1,3 +1,8 @@
+-- getting safari version
+set SAFARI_V to get version of application "Safari"
+
+
+
 -- select the csv to import to iCloud keychain
 set theFile to (choose file with prompt "Select the CSV file")
 
@@ -36,22 +41,34 @@ repeat with i from 1 to length of recs
 	tell application "System Events"
 		tell application process "Safari"
 			set frontmost to true
-			tell window 1
-				
-				click button "Add" of group 1 of group 1 of it
-				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
-					set value of text field 1 of it to kcURL
-					keystroke tab
-					set value of text field 2 of it to kcUsername
-					keystroke tab
-					set value of text field 3 of it to kcPassword
-					keystroke return
+			if (SAFARI_V ² 11) then
+				tell window 1
+					click button "Add" of group 1 of group 1 of it
+					tell last row of table 1 of scroll area of group 1 of group 1 of it
+						set value of text field 1 of it to kcURL
+						keystroke tab
+						set value of text field 2 of it to kcUsername
+						keystroke tab
+						set value of text field 3 of it to kcPassword
+						keystroke return
+					end tell
 				end tell
-				
-			end tell
+			else
+				tell window 1
+					click button "Add" of group 1 of group 1 of it
+				end tell
+				tell window "Passwords"
+					tell sheet 1 of it
+						set value of text field 1 of it to kcURL
+						keystroke tab
+						set value of text field 2 of it to kcUsername
+						keystroke tab
+						set value of text field 3 of it to kcPassword
+						keystroke tab
+						click UI element "Add Password"
+					end tell
+				end tell
+			end if
 		end tell
 	end tell
 end repeat
-
-

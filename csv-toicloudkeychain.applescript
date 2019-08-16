@@ -40,13 +40,18 @@ repeat with i from 1 to length of recs
 				
 				click button "Add" of group 1 of group 1 of it
 				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
-					set value of text field 1 of it to kcURL
-					keystroke tab
-					set value of text field 2 of it to kcUsername
-					keystroke tab
-					set value of text field 3 of it to kcPassword
-					keystroke return
+				tell sheet of it
+					set focused of text field 1 to true
+					keystroke kcURL
+					
+					set focused of text field 2 to true
+					keystroke kcUsername
+					
+					set focused of text field 3 to true
+					keystroke kcPassword
+					
+					click button "Add Password"
+					click button "Cancel"
 				end tell
 				
 			end tell

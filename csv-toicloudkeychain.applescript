@@ -1,5 +1,12 @@
+-- change the delimiter if you have passwords containing ","
+set csvDelim to ","
+
 -- select the csv to import to iCloud keychain
 set theFile to (choose file with prompt "Select the CSV file")
+
+-- ask user for password to unlock Safari
+set pwdDialog to display dialog "Enter password to unlock Safari" default answer "" buttons {"Cancel", "Continue"} default button "Continue" with hidden answer
+set myPassword to text returned of pwdDialog
 
 -- read csv file
 set f to read theFile
@@ -14,44 +21,89 @@ tell application "System Events"
 		keystroke "," using command down
 		tell window 1
 			click button "Passwords" of toolbar 1 of it
-			repeat until (exists button "Add" of group 1 of group 1 of it)
-				if not (exists button "Add" of group 1 of group 1 of it) then
-					display dialog "To begin importing, unlock Safari passwords then click OK. Please do not use your computer until the process has completed." with title "CSV to iCloud Keychain"
-				end if
-			end repeat
 		end tell
 	end tell
 end tell
 
+set abort to false
+
 -- getting values for each record
-set vals to {}
-set AppleScript's text item delimiters to ","
+set AppleScript's text item delimiters to csvDelim
 repeat with i from 1 to length of recs
-	set end of vals to text items of (item i of recs)
-	set kcURL to text item 1 of (item i of recs)
-	set kcUsername to text item 2 of (item i of recs)
-	set kcPassword to text item 3 of (item i of recs)
+	-- skip remaining rows if aborted
+	if abort then exit repeat
 	
-	-- write kcURL, kcUsername and kcPassword into text fields of safari passwords
-	tell application "System Events"
-		tell application process "Safari"
-			set frontmost to true
-			tell window 1
-				
-				click button "Add" of group 1 of group 1 of it
-				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
-					set value of text field 1 of it to kcURL
-					keystroke tab
-					set value of text field 2 of it to kcUsername
-					keystroke tab
-					set value of text field 3 of it to kcPassword
-					keystroke return
+	set done to false
+	
+	-- ignore empty lines on the csv file
+	if item i of recs is not "" then
+		set kcURL to text item 1 of (item i of recs)
+		set kcUsername to text item 2 of (item i of recs)
+		set kcPassword to text item 3 of (item i of recs)
+		
+		-- repeat eatch entry until successfull (sometimes the screen locks mid-operation)
+		repeat until (done)
+			-- capture errors like button or fields no longer present on the screen
+			try
+				-- write kcURL, kcUsername and kcPassword into text fields of safari passwords
+				tell application "System Events"
+					tell application process "Safari"
+						set frontmost to true
+						tell window "Passwords"
+							-- try to unlock the screen
+							repeat until (exists button "Add" of group 1 of group 1 of it)
+								log "Screen is locked, trying to unlock in 10 seconds"
+								tell text field 1 of group 1 of group 1 of it
+									-- wait for 10 seconds (Safari enters a high CPU usage loop when importing a large number of entries
+									delay 10
+									log "Typing password"
+									set focused of it to true
+									set value of it to myPassword
+									confirm
+								end tell
+							end repeat
+							
+							click button "Add" of group 1 of group 1 of it
+							-- write fields (using "set value of" fails to enable the "Add" button)
+							tell sheet of it
+								set focused of text field 1 to true
+								keystroke kcURL
+								
+								set focused of text field 2 to true
+								keystroke kcUsername
+								
+								set focused of text field 3 to true
+								keystroke kcPassword
+								
+								if (enabled of button "Add Password") then
+									click button "Add Password"
+									set done to true
+									log "Imported password for " & kcURL & " (" & kcUsername & ")" & " successfully"
+								else
+									-- Failed to add entry, cancel and proceed to the next row
+									click button "Cancel"
+									set done to true
+									log "Failed to import password for " & kcURL
+								end if
+							end tell
+						end tell
+					end tell
 				end tell
+			on error errText
+				log errText
 				
-			end tell
-		end tell
-	end tell
+				-- give the user 1 second to cancel the script (prevents runaway loops)
+				delay 1
+				
+				-- user stopped the script
+				if ((errText as string) contains "User cancelled") then
+					log "Aborting due to user request"
+					set abort to true
+					exit repeat
+				end if
+			end try
+		end repeat
+	end if
 end repeat
 
 

@@ -19,7 +19,7 @@ Script editor must be given permission under System Preferences - Security & Pri
 ## Additional Considerations
 Make sure to read the comments in the AppleScript file, specially:
 
-- Make sure you include the strings to be looked for on the same language as your machine _(Change 'String' to your language equivalent! X/4_ comments)
+- Make sure you include the strings to be looked for on the same language as your machine (``Change 'String' to your language equivalent! X/4`` comments)
 
 - Include enough delays to allow you to stop the script execution when a repeated password is detected (the OK button will NOT be enabled).
 

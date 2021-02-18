@@ -13,8 +13,17 @@ tell application "System Events"
 		set frontmost to true
 		keystroke "," using command down
 		tell window 1
+
+			-- Change Passwords to your language equivalent! 1/4
+
 			click button "Passwords" of toolbar 1 of it
+
+			-- Change Add to your language equivalent! 2/4
+
 			repeat until (exists button "Add" of group 1 of group 1 of it)
+
+				-- Change Add to your language equivalent! 3/4
+
 				if not (exists button "Add" of group 1 of group 1 of it) then
 					display dialog "To begin importing, unlock Safari passwords then click OK. Please do not use your computer until the process has completed." with title "CSV to iCloud Keychain"
 				end if
@@ -38,20 +47,30 @@ repeat with i from 1 to length of recs
 			set frontmost to true
 			tell window 1
 				
+				-- Change Add to your language equivalent! 4/4
+
 				click button "Add" of group 1 of group 1 of it
-				-- write fields
-				tell last row of table 1 of scroll area of group 1 of group 1 of it
-					set value of text field 1 of it to kcURL
-					keystroke tab
-					set value of text field 2 of it to kcUsername
-					keystroke tab
-					set value of text field 3 of it to kcPassword
-					keystroke return
-				end tell
 				
+				-- write fields
+
+				tell application "System Events" to keystroke kcURL
+				keystroke tab
+				tell application "System Events" to keystroke kcUsername
+				keystroke tab
+				tell application "System Events" to keystroke kcPassword
+
+				-- Include enough delays to allow user to stop the script execution when a repeated password is detected (the OK button will NOT be enabled). Please make sure all the imported passwords are NOT already in the iCloud Keychain and that the fields to write the password details are empty (and with the focus on the first one) BEFORE running the script!
+
+				delay 5
+				keystroke tab
+				delay 0.5
+				keystroke tab
+				delay 0.5
+				keystroke tab
+				
+				keystroke return
 			end tell
 		end tell
 	end tell
 end repeat
-
 

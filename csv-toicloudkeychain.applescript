@@ -62,7 +62,7 @@ repeat with i from 1 to length of recs
 				-- Include enough delays to allow user to stop the script execution when a repeated password is detected (the OK button will NOT be enabled). Please make sure that:
 
 				-- -> All the imported passwords are NOT already in the iCloud Keychain
-				-- -> The fields to write the password details are empty (and with the focus on the first one, see screenshot) BEFORE running the script! (Because maybe you need to stop it to fix some CSV line, make sure the fields are like in the screenshot with the dialog closed BEFORE running the script)
+				-- -> The fields to write the password details are empty (and with the focus on the first one, see screenshot) BEFORE running the script! (Because maybe you need to stop it to fix some CSV line, make sure the fields are set as in the screenshot and that the dialog is closed BEFORE running the script)
 				-- -> All CSV lines END WITH a domain: Safari does NOT accept password sites like "example", but only "example.com", careful when migrating from third-party apps.
 
 				delay 5
